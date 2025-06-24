@@ -1,11 +1,16 @@
 {
   "name": "@safron/directus-sync",
-  "version": "3.2.4",
+  "version": "3.2.5",
   "description": "This is a CLI tool to sync schema and configuration from one Directus instance to another.",
   "main": "./dist/index.js",
   "bin": {
     "directus-sync": "./bin/index.js"
   },
+  "files": [
+    "dist",
+    "bin",
+    "README.md"
+  ],
   "scripts": {
     "bin": "node ./bin/index.js",
     "build": "tsc",
