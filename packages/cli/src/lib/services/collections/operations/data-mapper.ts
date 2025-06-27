@@ -16,7 +16,7 @@ export class OperationsDataMapper extends DataMapper<DirectusOperation> {
   ];
   protected idMappers: IdMappers<DirectusOperation> = {
     flow: {
-      id: Container.get(FlowsIdMapperClient)
+      id: Container.get(FlowsIdMapperClient),
     },
     resolve: Container.get(OperationsIdMapperClient),
     reject: Container.get(OperationsIdMapperClient),

@@ -11,15 +11,14 @@ interface NamedFlowReference extends FlowReference {
 
 export type DirectusOperationBase = BaseDirectusOperation<BaseSchema>;
 
-type DirectusOperationWithFlatConnections = Omit<DirectusOperationBase, 'resolve' | 'reject'> & {
+type DirectusOperationWithFlatConnections = Omit<
+  DirectusOperationBase,
+  'resolve' | 'reject'
+> & {
   resolve?: string | null;
   reject?: string | null;
-}
-
-export type DirectusOperationWithFlow = Omit<DirectusOperationWithFlatConnections, 'flow'> & {
-  flow: FlowReference;
-}
+};
 
 export type DirectusOperation = DirectusOperationWithFlatConnections & {
   flow: NamedFlowReference;
-}
+};

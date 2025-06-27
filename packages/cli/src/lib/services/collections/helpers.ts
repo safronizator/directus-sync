@@ -17,7 +17,7 @@ import {
   TranslationsIdMapperClient,
 } from './translations';
 import { POLICIES_COLLECTION, PoliciesIdMapperClient } from './policies';
-import { readdirSync, statSync, rmdirSync, unlinkSync } from 'fs-extra';
+import { readdirSync, statSync, rmSync } from 'fs-extra';
 import path from 'path';
 
 export function getIdMapperClientByName(collection: string) {
@@ -69,13 +69,12 @@ const isFileExists = (path: string) => {
   } catch (error) {
     return false;
   }
-}
+};
 
-const isDir = (path: string) =>
-  statSync(path).isDirectory();
+const isDir = (path: string) => statSync(path).isDirectory();
 
 export const listOnlyDirs = (dir: string): string[] =>
-  readdirSync(dir).filter(entry => isDir(path.join(dir, entry)));
+  readdirSync(dir).filter((entry) => isDir(path.join(dir, entry)));
 
 export const clearDirIfExists = (dir: string): void => {
   if (!isFileExists(dir)) {
@@ -83,12 +82,24 @@ export const clearDirIfExists = (dir: string): void => {
   }
   const entries = readdirSync(dir);
   for (const entry of entries) {
-    const entryPath = path.join(dir, entry);
     // Remove the file or directory
-    if (statSync(entryPath).isDirectory()) {
-      rmdirSync(entryPath, { recursive: true })
-    } else {
-      unlinkSync(entryPath);
-    }
+    rmSync(path.join(dir, entry), { recursive: true });
   }
+};
+
+export const groupBy = <T>(
+  items: T[],
+  key: (item: T) => string,
+): Record<string, T[]> => {
+  return items.reduce(
+    (acc, item) => {
+      const k = key(item);
+      if (!acc[k]) {
+        acc[k] = [];
+      }
+      acc[k].push(item);
+      return acc;
+    },
+    {} as Record<string, T[]>,
+  );
 };

@@ -39,7 +39,10 @@ export class OperationsDataClient extends DataClient<DirectusOperation> {
   }
 
   protected getQueryCommand(query: Query<DirectusOperation>) {
-    return readOperations({ ...query, fields: ["*", "flow.id", "flow.name"] } as Query<DirectusOperationBase>);
+    return readOperations({
+      ...query,
+      fields: ['*', 'flow.id', 'flow.name'],
+    } as Query<DirectusOperationBase>);
   }
 
   protected async getUpdateCommand(
