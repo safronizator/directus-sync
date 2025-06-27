@@ -17,6 +17,8 @@ import {
   TranslationsIdMapperClient,
 } from './translations';
 import { POLICIES_COLLECTION, PoliciesIdMapperClient } from './policies';
+import { readdirSync, statSync, rmdirSync, unlinkSync } from 'fs-extra';
+import path from 'path';
 
 export function getIdMapperClientByName(collection: string) {
   let idMapper: IdMapperClient;
@@ -59,3 +61,34 @@ export function getIdMapperClientByName(collection: string) {
   }
   return idMapper;
 }
+
+const isFileExists = (path: string) => {
+  try {
+    statSync(path);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+const isDir = (path: string) =>
+  statSync(path).isDirectory();
+
+export const listOnlyDirs = (dir: string): string[] =>
+  readdirSync(dir).filter(entry => isDir(path.join(dir, entry)));
+
+export const clearDirIfExists = (dir: string): void => {
+  if (!isFileExists(dir)) {
+    return;
+  }
+  const entries = readdirSync(dir);
+  for (const entry of entries) {
+    const entryPath = path.join(dir, entry);
+    // Remove the file or directory
+    if (statSync(entryPath).isDirectory()) {
+      rmdirSync(entryPath, { recursive: true })
+    } else {
+      unlinkSync(entryPath);
+    }
+  }
+};
