@@ -9,7 +9,7 @@ import {
 } from '@directus/sdk';
 import { Inject, Service } from 'typedi';
 import { MigrationClient } from '../../migration-client';
-import { DirectusOperation } from './interfaces';
+import { DirectusOperation, DirectusOperationBase } from './interfaces';
 import { LOGGER } from '../../../constants';
 import pino from 'pino';
 import { getChildLogger } from '../../../helpers';
@@ -39,7 +39,10 @@ export class OperationsDataClient extends DataClient<DirectusOperation> {
   }
 
   protected getQueryCommand(query: Query<DirectusOperation>) {
-    return readOperations(query);
+    return readOperations({
+      ...query,
+      fields: ['*', 'flow.id', 'flow.name'],
+    } as Query<DirectusOperationBase>);
   }
 
   protected async getUpdateCommand(

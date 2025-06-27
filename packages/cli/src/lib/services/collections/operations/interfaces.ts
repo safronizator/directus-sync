@@ -1,4 +1,24 @@
 import { DirectusOperation as BaseDirectusOperation } from '@directus/sdk';
 import { BaseSchema } from '../base';
 
-export type DirectusOperation = BaseDirectusOperation<BaseSchema>;
+interface FlowReference {
+  id: string;
+}
+
+interface NamedFlowReference extends FlowReference {
+  name: string;
+}
+
+export type DirectusOperationBase = BaseDirectusOperation<BaseSchema>;
+
+type DirectusOperationWithFlatConnections = Omit<
+  DirectusOperationBase,
+  'resolve' | 'reject'
+> & {
+  resolve?: string | null;
+  reject?: string | null;
+};
+
+export type DirectusOperation = DirectusOperationWithFlatConnections & {
+  flow: NamedFlowReference;
+};
